@@ -12,9 +12,8 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 /**
- * Created by ProtonMail on 2/25/19.
  * Shows any days that have less than a 50% chance of rain, ordered hottest to coldest
- * */
+ */
 class HottestFragment : Fragment() {
 
     // TODO: Please fix any errors and implement the missing parts (including any UI changes)

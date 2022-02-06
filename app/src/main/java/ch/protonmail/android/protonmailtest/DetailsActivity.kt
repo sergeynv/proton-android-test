@@ -7,7 +7,6 @@ import android.widget.Button
 import android.widget.TextView
 
 /**
- * Created by ProtonMail on 2/25/19.
  * Shows all the details for a particular day.
  */
 class DetailsActivity : AppCompatActivity() {

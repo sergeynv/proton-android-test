@@ -12,9 +12,8 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 /**
- * Created by ProtonMail on 2/25/19.
  * Shows the upcoming list of days returned by the API in order of day
- **/
+ */
 class UpcomingFragment : Fragment() {
 
     // TODO: Please fix any errors and implement the missing parts (including any UI changes)

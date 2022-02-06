@@ -5,9 +5,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-/**
- * Created by ProtonMail on 2/25/19.
- */
 public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.DayViewHolder> {
 
     String[] data;
