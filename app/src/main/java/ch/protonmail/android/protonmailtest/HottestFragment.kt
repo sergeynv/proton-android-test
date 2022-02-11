@@ -18,7 +18,7 @@ class HottestFragment : Fragment() {
 
     // TODO: Please fix any errors and implement the missing parts (including any UI changes)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val rootView = inflater.inflate(R.layout.fragment_hottest, container, false)
+        val rootView = inflater.inflate(R.layout.fragment_forecast, container, false)
 
         val layoutManager = LinearLayoutManager(context)
         val adapter = ForecastAdapter()

@@ -5,32 +5,36 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.DayViewHolder> {
+import java.util.ArrayList;
+import java.util.List;
 
-    String[] data;
+class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.DayViewHolder> {
+    private final List<String> mItems = new ArrayList<>();
 
     @NonNull
     @Override
     public DayViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        // TODO: implement.
         return null;
     }
 
     @Override
     public void onBindViewHolder(@NonNull DayViewHolder holder, int position) {
-        holder.titleView.setText(data[0]);
+        final String item = mItems.get(position);
+        holder.titleView.setText(item);
     }
 
     @Override
     public int getItemCount() {
-        return 5;
+        return mItems.size();
     }
 
-    public static class DayViewHolder extends RecyclerView.ViewHolder {
+    protected static class DayViewHolder extends RecyclerView.ViewHolder {
+        final TextView titleView;
 
-        private TextView titleView;
-        public DayViewHolder(@NonNull TextView v) {
-            super(v);
-            titleView = v;
+        DayViewHolder(@NonNull TextView view) {
+            super(view);
+            titleView = view;
         }
     }
 }
