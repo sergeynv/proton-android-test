@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">ProtonMailTest</string>
+
+    <!-- Tabs Titles -->
+    <string name="upcoming">Upcoming</string>
+    <string name="hottest">Hottest</string>
 </resources>
