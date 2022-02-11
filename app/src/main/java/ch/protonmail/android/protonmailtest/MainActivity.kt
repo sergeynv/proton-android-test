@@ -1,18 +1,20 @@
 package ch.protonmail.android.protonmailtest
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var viewPager: ViewPager2
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-//        val pager = findViewById<ViewPager>(R.id.pager)
-//        val adapter = TabsAdapter(this, supportFragmentManager)
-//        pager.adapter = adapter
+        viewPager = findViewById<ViewPager2>(R.id.view_pager).apply { adapter = pagerAdapter }
 
         findViewById<BottomNavigationView>(R.id.bottom_navigation).setOnItemSelectedListener {
             onNavigationItemSelected(it.itemId)
@@ -21,18 +23,27 @@ class MainActivity : AppCompatActivity() {
 
     private fun onNavigationItemSelected(id: Int): Boolean {
         when (id) {
-            R.id.navigation_item_upcoming -> Log.d(TAG, """Selected "Upcoming"""")
-            R.id.navigation_item_hottest -> Log.d(TAG, """Selected "Hottest"""")
+            R.id.navigation_item_upcoming -> viewPager.currentItem = POSITION_UPCOMING
+            R.id.navigation_item_hottest -> viewPager.currentItem = POSITION_HOTTEST
             else -> return false
         }
         return true
     }
 
-    private fun initTabs() {
-        //TODO
+    private val pagerAdapter = object : FragmentStateAdapter(this) {
+        override fun getItemCount() = 2
+
+        override fun createFragment(position: Int): Fragment = when(position) {
+            POSITION_UPCOMING -> UpcomingFragment()
+            POSITION_HOTTEST -> HottestFragment()
+            else -> throw IllegalArgumentException("Illegal position index $position")
+        }
     }
 
     companion object {
         private const val TAG = "MainActivity"
+
+        private const val POSITION_UPCOMING = 0;
+        private const val POSITION_HOTTEST = 1;
     }
 }
