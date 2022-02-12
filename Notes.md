@@ -11,3 +11,11 @@
 
 ## RecyclerView
 - [developer.android.com/guide](https://developer.android.com/guide/topics/ui/layout/recyclerview)
+
+# Data Layer
+
+## Room
+- [developer.android.com/training](https://developer.android.com/training/data-storage/room)
+
+## Retrofit
+- [retrofit](https://square.github.io/retrofit/)
