@@ -8,7 +8,7 @@ import retrofit2.http.GET
 interface ForecastService {
 
     @GET("api/forecast")
-    fun forecast(): Call<List<String>>
+    fun forecast(): Call<List<DayForecast>>
 
     companion object {
         val instance: ForecastService by lazy {

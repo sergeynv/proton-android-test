@@ -18,4 +18,8 @@
 - [developer.android.com/training](https://developer.android.com/training/data-storage/room)
 
 ## Retrofit
-- [retrofit](https://square.github.io/retrofit/)
+- [github](https://square.github.io/retrofit/)
+
+## Gson
+- [github](https://github.com/google/gson)
+- [UserGuide.md](https://github.com/google/gson/blob/master/UserGuide.md)
