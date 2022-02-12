@@ -14,7 +14,7 @@ import java.net.URL
 /**
  * Base class for displaying daily forecast.
  */
-internal abstract class ForecastFragment : Fragment() {
+sealed class ForecastFragment : Fragment() {
     private val adapter by lazy { ForecastAdapter() }
 
     final override fun onCreateView(
@@ -67,3 +67,14 @@ internal abstract class ForecastFragment : Fragment() {
         }
     }
 }
+
+/**
+ * Displays list of available daily forecast for the days with less than 50% chance of
+ * precipitation in in descending order of average daily temperature.
+ */
+internal class HottestFragment : ForecastFragment()
+
+/**
+ * Displays list of all available daily forecast.
+ */
+internal class UpcomingFragment : ForecastFragment()
