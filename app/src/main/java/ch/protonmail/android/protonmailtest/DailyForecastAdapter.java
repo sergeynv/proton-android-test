@@ -15,7 +15,7 @@ import java.util.List;
 
 class DailyForecastAdapter extends RecyclerView.Adapter<DailyForecastAdapter.ViewHolder>
         implements Observer<List<DayForecast>> {
-    private static final boolean DISPLAY_SUNRISE_SUNSET = true;
+    private static final boolean DISPLAY_SUNRISE_SUNSET = false;
 
     private final @NonNull List<DayForecast> mForecast = new ArrayList<>();
 
@@ -56,7 +56,9 @@ class DailyForecastAdapter extends RecyclerView.Adapter<DailyForecastAdapter.Vie
     public void onChanged(List<DayForecast> newForecast) {
         // Update the data.
         mForecast.clear();
-        mForecast.addAll(newForecast);
+        if (newForecast != null) {
+            mForecast.addAll(newForecast);
+        }
         // Trigger UI update.
         notifyDataSetChanged();
     }

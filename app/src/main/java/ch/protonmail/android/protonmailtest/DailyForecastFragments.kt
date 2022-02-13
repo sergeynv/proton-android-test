@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -12,14 +13,17 @@ import androidx.recyclerview.widget.RecyclerView
 /**
  * Base class for displaying daily forecast.
  */
-sealed class ForecastFragment : Fragment() {
+internal sealed class BaseDailyForecastFragment : Fragment() {
+    protected lateinit var viewModel: ForecastViewModel
     private val adapter by lazy { DailyForecastAdapter() }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    final override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val viewModel = ViewModelProvider(this).get(ForecastViewModel::class.java)
-        viewModel.dailyForecast.observe(/* LifecycleOwner*/ this, /* Observer */ adapter)
+        // Initialize ViewModel.
+        viewModel = ViewModelProvider(this).get(ForecastViewModel::class.java)
+        // Now that ViewModel is ready, we can get and subscribe to the LiveData.
+        getForecastLiveData().observe(/* LifecycleOwner*/ this, /* Observer */ adapter)
     }
 
     final override fun onCreateView(
@@ -34,15 +38,22 @@ sealed class ForecastFragment : Fragment() {
             recyclerView.layoutManager = LinearLayoutManager(context)
         }
     }
+
+    abstract fun getForecastLiveData(): LiveData<List<DayForecast>>
 }
+
+/**
+ * Displays list of all available daily forecast.
+ */
+internal class UpcomingFragment : BaseDailyForecastFragment() {
+    override fun getForecastLiveData() = viewModel.upcoming
+}
+
 
 /**
  * Displays list of available daily forecast for the days with less than 50% chance of
  * precipitation in in descending order of average daily temperature.
  */
-internal class HottestFragment : ForecastFragment()
-
-/**
- * Displays list of all available daily forecast.
- */
-internal class UpcomingFragment : ForecastFragment()
+internal class HottestFragment : BaseDailyForecastFragment() {
+    override fun getForecastLiveData() = viewModel.hottest
+}

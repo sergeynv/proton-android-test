@@ -1,9 +1,13 @@
 # App Architecture
 - [Guide to app architecture](https://developer.android.com/jetpack/guide)
 
+
 # UI Layer
 - [UI layer (guide)](https://developer.android.com/jetpack/guide/ui-layer)
 - [View Model](https://developer.android.com/topic/libraries/architecture/viewmodel)
+- [LiveData](https://developer.android.com/reference/android/arch/lifecycle/LiveData)
+	- [MediatorLiveData](https://developer.android.com/reference/android/arch/lifecycle/MediatorLiveData)
+	- [Transformations](https://developer.android.com/reference/android/arch/lifecycle/Transformations)
 
 ## UI Components
 

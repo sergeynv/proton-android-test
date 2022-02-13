@@ -6,7 +6,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class DailyForecastLiveData : LiveData<List<DayForecast>>() {
+class DailyForecastLiveData : LiveData<List<DayForecast>?>() {
     private var isLoading: Boolean = false
 
     override fun onActive() {
