@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 
-class ForecastViewModel : ViewModel() {
+class DailyForecastViewModel : ViewModel() {
     private val allForecast: LiveData<List<DayForecast>?> by lazy { DailyForecastLiveData() }
 
     val upcoming: LiveData<List<DayForecast>> by lazy {

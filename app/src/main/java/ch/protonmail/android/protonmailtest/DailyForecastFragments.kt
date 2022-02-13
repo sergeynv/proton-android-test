@@ -11,17 +11,20 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 /**
- * Base class for displaying daily forecast.
+ * Base class for Fragments that display daily forecast.
  */
 internal sealed class BaseDailyForecastFragment : Fragment() {
-    protected lateinit var viewModel: ForecastViewModel
+    protected lateinit var viewModel: DailyForecastViewModel
     private val adapter by lazy { DailyForecastAdapter() }
 
     final override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Initialize ViewModel.
-        viewModel = ViewModelProvider(this).get(ForecastViewModel::class.java)
+        // Let all the DailyForecastFragments hosted by the same Activity share the ViewModel (which
+        // makes sense since we have a single REST API call which returns all of the data, and the
+        // filtering out and sorting is done locally)
+        viewModel = ViewModelProvider(requireActivity()).get(DailyForecastViewModel::class.java)
+
         // Now that ViewModel is ready, we can get and subscribe to the LiveData.
         getForecastLiveData().observe(/* LifecycleOwner*/ this, /* Observer */ adapter)
     }
@@ -32,14 +35,15 @@ internal sealed class BaseDailyForecastFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View = inflater.inflate(R.layout.fragment_forecast, container, false)
 
-    final override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        view.findViewById<RecyclerView>(R.id.recycler_view).let { recyclerView ->
-            recyclerView.adapter = adapter
-            recyclerView.layoutManager = LinearLayoutManager(context)
-        }
+    final override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?
+    ) = view.findViewById<RecyclerView>(R.id.recycler_view).let { recyclerView ->
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(context)
     }
 
-    abstract fun getForecastLiveData(): LiveData<List<DayForecast>>
+    protected abstract fun getForecastLiveData(): LiveData<List<DayForecast>>
 }
 
 /**
