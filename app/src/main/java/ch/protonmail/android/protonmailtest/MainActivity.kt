@@ -34,6 +34,7 @@ class MainActivity : AppCompatActivity() {
         srl.setOnRefreshListener { viewModel.fetch() }
 
         val offlineLabel = findViewById<View>(R.id.label_offline)
+        val noDataLabel = findViewById<View>(R.id.label_no_data)
 
         // Now subscribe to the LiveData-s (exposed by the ViewModel) we are interested in on the
         // Activity scope.
@@ -42,6 +43,19 @@ class MainActivity : AppCompatActivity() {
         }
         viewModel.isOffline.observe(/* LifecycleOwner */ this) { isOffline ->
             offlineLabel.visibility = if (isOffline) View.VISIBLE else View.GONE
+        }
+        viewModel.isDataAvailable.observe(/* LifecycleOwner */ this) { dataAvailable ->
+            if (dataAvailable) {
+                viewPager.visibility = View.VISIBLE
+                noDataLabel.visibility = View.GONE
+            } else {
+                // Let's not remove the ViewPager from the hierarchy completely (using GONE), but
+                // just "hide" it (the adapter may not like the former, which is not something,
+                // which needs to be investigated, which takes more time, than a test assignment
+                // should take)
+                viewPager.visibility = View.INVISIBLE
+                noDataLabel.visibility = View.VISIBLE
+            }
         }
     }
 

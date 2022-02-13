@@ -9,4 +9,5 @@
     <string name="menu_refresh">Refresh</string>
     <!-- Labels -->
     <string name="label_offline">Offline</string>
+    <string name="label_no_data">No data available.</string>
 </resources>
