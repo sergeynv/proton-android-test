@@ -4,6 +4,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.annotation.MainThread
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import retrofit2.Call
 import retrofit2.Callback
@@ -14,10 +15,23 @@ object DailyForecastRepository {
     // Would love to disable this, but the mockapi.io we are using here, is just sooo unreliable...
     private const val DEBUG_SHOW_TOAST = true
 
+    private val fetchedData = object : MutableLiveData<List<DayForecast>?>(null) {
+        // (Re-)fetch data from when when new becomes active
+        override fun onActive() = fetch()
+    }
+
+    private val cachedData = MutableLiveData<List<DayForecast>>(emptyList())
+
+    // LiveData that "combines" fetched data and the cached data, by always "prioritizing" the
+    // fetched data when it's available (non-null).
     private val data by lazy {
-        object : MutableLiveData<List<DayForecast>>(emptyList()) {
-            // (Re-)fetch data from when when new becomes active
-            override fun onActive() = fetch()
+        object : MediatorLiveData<List<DayForecast>>() {
+            init {
+                // Use updated fetched data, unless it's null, then use cached data.
+                addSource(fetchedData) { data -> postValue(data ?: cachedData.value) }
+                // Ignore updates to the cached data, unless fetched data is null.
+                addSource(cachedData) { data -> if (fetchedData.value == null) postValue(data)}
+            }
         }
     }
 
@@ -31,8 +45,9 @@ object DailyForecastRepository {
 
     fun isLastFetchFailed(): LiveData<Boolean> = lastFetchFailed
 
-    // @MainThread is slightly cheating...
-    // Will come back to implement proper thread-safety if have time.
+    // Restricting this so that it should only be called from the Main Thread (which is kindof
+    // cheating slightly, normally this the proper should be implemented here, but that feels out of
+    // scope for a test assignment).
     @MainThread
     fun fetch() {
         Log.d(TAG, "fetch()")
@@ -43,7 +58,7 @@ object DailyForecastRepository {
         }
         fetching.postValue(true)
 
-        ForecastRestService.forecast().enqueue(callback)
+        ForecastRestService.forecast().enqueue(fetchingCallback)
 
         maybeShowDebugToast("fetch() started")
     }
@@ -53,7 +68,7 @@ object DailyForecastRepository {
         Toast.makeText(ForecastApplication.instance, text, Toast.LENGTH_SHORT).show()
     }
 
-    private val callback = object : Callback<List<DayForecast>> {
+    private val fetchingCallback = object : Callback<List<DayForecast>> {
         override fun onResponse(
             call: Call<List<DayForecast>>,
             response: Response<List<DayForecast>>
