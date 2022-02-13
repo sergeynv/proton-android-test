@@ -2,8 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/navigation_item_upcoming"
-        android:title="@string/upcoming" />
+        android:title="@string/tab_title_upcoming" />
     <item
         android:id="@+id/navigation_item_hottest"
-        android:title="@string/hottest" />
+        android:title="@string/tab_title_hottest" />
 </menu>

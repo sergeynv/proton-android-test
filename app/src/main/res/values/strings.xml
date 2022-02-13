@@ -1,7 +1,12 @@
 <resources>
     <string name="app_name">ProtonMailTest</string>
 
-    <!-- Tabs Titles -->
-    <string name="upcoming">Upcoming</string>
-    <string name="hottest">Hottest</string>
+    <!-- MAIN ACTIVITY -->
+    <!-- Tabs -->
+    <string name="tab_title_upcoming">Upcoming</string>
+    <string name="tab_title_hottest">Hottest</string>
+    <!-- Options Menu-->
+    <string name="menu_refresh">Refresh</string>
+    <!-- Labels -->
+    <string name="label_offline">Offline</string>
 </resources>

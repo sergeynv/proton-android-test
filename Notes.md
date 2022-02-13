@@ -22,6 +22,8 @@
 ### RecyclerView
 - [developer.android.com/guide](https://developer.android.com/guide/topics/ui/layout/recyclerview)
 
+### Swipe-to-Refresh
+- [Adding Swipe-to-Refresh To Your App (Guide)](https://developer.android.com/training/swipe/add-swipe-interface)
 
 # Data Layer
 
