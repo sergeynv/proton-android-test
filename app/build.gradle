@@ -7,7 +7,8 @@ android {
     compileSdkVersion 31
     defaultConfig {
         applicationId "ch.protonmail.android.protonmailtest"
-        minSdkVersion 15
+        // This could have been 15, but using LocalTime class was too tempting...
+        minSdkVersion 26
         targetSdkVersion 31
         versionCode 1
         versionName "1.0"

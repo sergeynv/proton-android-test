@@ -1,14 +1,17 @@
 package ch.protonmail.android.protonmailtest
 
 import com.google.gson.annotations.SerializedName
+import java.time.LocalTime
 
 data class DayForecast(
-    val day: Int,
+    @SerializedName("day") val dayIndex: Int,
     val description: String?,
-    val sunrise: Int,
-    val sunset: Int,
-    @SerializedName("chance_rain") val chanceRain: Float,
+    val sunrise: LocalTime,
+    val sunset: LocalTime,
+    @SerializedName("chance_rain") val rainChance: Float,
     val high: Int,
     val low: Int,
     val image: String?
-)
+) {
+    val rainChanceInPercent: Int = (rainChance * 100).toInt()
+}

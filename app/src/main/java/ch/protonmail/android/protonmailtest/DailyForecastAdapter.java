@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,6 +15,8 @@ import java.util.List;
 
 class DailyForecastAdapter extends RecyclerView.Adapter<DailyForecastAdapter.ViewHolder>
         implements Observer<List<DayForecast>> {
+    private static final boolean DISPLAY_SUNRISE_SUNSET = true;
+
     private final @NonNull List<DayForecast> mForecast = new ArrayList<>();
 
     @NonNull
@@ -29,11 +32,19 @@ class DailyForecastAdapter extends RecyclerView.Adapter<DailyForecastAdapter.Vie
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final DayForecast f = mForecast.get(position);
 
-        final String title = "Day " + f.getDay() + ": " + f.getDescription();
-        final String subtitle = "High: " + f.getHigh() + " | Low: " + f.getLow();
-
+        final String title = "Day: " + f.getDayIndex() + ": " + f.getDescription();
         holder.title.setText(title);
-        holder.subtitle.setText(subtitle);
+
+        final StringBuilder subtitleBuilder = new StringBuilder()
+                .append("High: ").append(f.getHigh()).append(" | ")
+                .append("Low: ").append(f.getLow()).append(" | ")
+                .append("Rain: ").append(f.getRainChanceInPercent() + '%');
+        if (DISPLAY_SUNRISE_SUNSET) {
+            subtitleBuilder.append(" | ")
+                    .append("Sunrise: ").append(f.getSunrise()).append(" | ")
+                    .append("Sunset: ").append(f.getSunset());
+        }
+        holder.subtitle.setText(subtitleBuilder.toString());
     }
 
     @Override
