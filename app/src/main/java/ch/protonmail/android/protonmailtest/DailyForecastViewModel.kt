@@ -22,13 +22,13 @@ class DailyForecastViewModel : ViewModel() {
 
     val upcoming: LiveData<List<DayForecast>> by lazy {
         Transformations.map(DailyForecastRepository.getData()) { allForecast ->
-            allForecast.sortedBy { it.high }
+            allForecast.sortedBy { it.dayIndex }
         }
     }
 
     val hottest: LiveData<List<DayForecast>> by lazy {
         Transformations.map(DailyForecastRepository.getData()) { allForecast ->
-            allForecast.filter { it.rainChance < 0.5 }.sortedBy { it.high }
+            allForecast.filter { it.rainChance < 0.5 }.sortedByDescending { it.high }
         }
     }
 
