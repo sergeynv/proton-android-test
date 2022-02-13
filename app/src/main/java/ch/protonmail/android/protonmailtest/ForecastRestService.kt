@@ -8,12 +8,16 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import java.time.LocalTime
 
-interface ForecastService {
+interface ForecastRestService {
 
     @GET("api/forecast")
     fun forecast(): Call<List<DayForecast>>
 
-    companion object {
+    // Making the companion object implement the interface, makes it's possible for the clients to
+    // simply use the forecast() as if it was a "Java static" method.
+    companion object : ForecastRestService {
+        override fun forecast(): Call<List<DayForecast>> = instance.forecast()
+
         private const val ENDPOINT = "https://5c5c8ba58d018a0014aa1b24.mockapi.io/"
 
         private val localTimeDeserializer = JsonDeserializer { json, _, _ ->
@@ -33,8 +37,8 @@ interface ForecastService {
                 .build()
         }
 
-        val instance: ForecastService by lazy {
-            retrofit.create(ForecastService::class.java)
+        private val instance: ForecastRestService by lazy {
+            retrofit.create(ForecastRestService::class.java)
         }
     }
 }
