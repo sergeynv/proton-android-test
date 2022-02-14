@@ -15,4 +15,11 @@
 
     <!-- DETAILS ACTIVITY -->
     <string name="title_day_index">Day %d</string>
+    <string name="btn_download">Download</string>
+    <!-- Labels -->
+    <string name="label_description">Description</string>
+    <string name="label_precipitation">Precipitation</string>
+    <string name="label_temp">Low / High</string>
+    <string name="label_sun">Rise / Set</string>
+
 </resources>

@@ -1,25 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".DetailsActivity">
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="8dp"
+    tools:context=".DetailsActivity">
 
-    <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent"
-                  android:orientation="vertical">
+    <!-- Labels -->
 
-        <TextView
-                android:id="@+id/title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:textSize="18sp"
-                android:text="Title"/>
+    <TextView
+        android:id="@+id/label_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/label_description"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <Button android:id="@+id/download"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Download"/>
-    </LinearLayout>
+    <TextView
+        android:id="@+id/label_precipitation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/label_precipitation"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/label_description" />
+
+    <TextView
+        android:id="@+id/label_temp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/label_temp"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/label_precipitation" />
+
+    <TextView
+        android:id="@+id/label_sun"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/label_sun"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/label_temp" />
+
+    <!-- Vertical Barrier -->
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="end"
+        app:barrierMargin="16dp"
+        app:constraint_referenced_ids="label_description,label_precipitation, label_temp" />
+
+    <!-- Values -->
+
+    <TextView
+        android:id="@+id/description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        app:layout_constraintBaseline_toBaselineOf="@id/label_description"
+        app:layout_constraintStart_toEndOf="@id/barrier"
+        tools:text="Cloudy with showers"/>
+
+    <TextView
+        android:id="@+id/precipitation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        app:layout_constraintBaseline_toBaselineOf="@id/label_precipitation"
+        app:layout_constraintStart_toEndOf="@id/barrier"
+        tools:text="50%"/>
+
+    <TextView
+        android:id="@+id/temp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        app:layout_constraintBaseline_toBaselineOf="@id/label_temp"
+        app:layout_constraintStart_toEndOf="@id/barrier"
+        tools:text="5 - 15"/>
+
+    <TextView
+        android:id="@+id/sun"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        app:layout_constraintBaseline_toBaselineOf="@id/label_sun"
+        app:layout_constraintStart_toEndOf="@id/barrier"
+        tools:text="7:00 - 18:00"/>
+
+    <!-- Button -->
+
+    <Button
+        android:id="@+id/download"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_download"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
