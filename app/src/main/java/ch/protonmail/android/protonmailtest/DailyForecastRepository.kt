@@ -105,16 +105,6 @@ object DailyForecastRepository {
     /** Clears local cache. */
     fun clearCache() = ForecastLocalStorage.clear()
 
-    /** Store data to the local cache. */
-    private fun cache(data: List<DayForecast>) {
-        // Actually this needs to be an atomic operation, otherwise we may lose cache, if the
-        // process is killed or tha app crashes after clear() call is completed, but before store()
-        // had a chance to fully run, or if store simply fails.
-        // But for the test assignment this will have to do.
-        ForecastLocalStorage.clear()
-        ForecastLocalStorage.store(data)
-    }
-
     private val fetchingCallback = object : Callback<List<DayForecast>> {
         override fun onResponse(
             call: Call<List<DayForecast>>,
@@ -129,7 +119,9 @@ object DailyForecastRepository {
                 // lastFetchFailed LiveData).
                 val data = response.body()!!
                 fetchedData.postValue(response.body())
-                cache(data)
+
+                // Cache the data we just fetched.
+                ForecastLocalStorage.insertAll(data)
             }
             fetching.postValue(false)
             lastFetchFailed.postValue(response.isSuccessful.not())

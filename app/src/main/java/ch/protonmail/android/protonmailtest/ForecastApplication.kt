@@ -21,13 +21,14 @@ class ForecastApplication: Application() {
             private set
 
         fun maybeShowDebugToast(text: String) {
+            val toastText = "[DEBUG] $text"
             if (DEBUG_SHOW_TOAST.not()) return
             // If we are not on the MainThread, we'll need to "post" it there, otherwise - simply
             // run.
             if (Looper.myLooper() == Looper.getMainLooper()) {
-                showToast(text)
+                showToast(toastText)
             } else {
-                mainHandler.post { showToast(text) }
+                mainHandler.post { showToast(toastText) }
             }
         }
 
