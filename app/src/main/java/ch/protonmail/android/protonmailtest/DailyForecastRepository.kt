@@ -26,12 +26,9 @@ import retrofit2.Response
 object DailyForecastRepository {
     private const val TAG = "DailyForecastLiveData"
 
-    // Doesn't need to be initialized lazily, since it really we'll do something interesting (force
-    // fetching) when it becomes active.
-    private val fetchedData = object : MutableLiveData<List<DayForecast>?>(null) {
-        // (Re-)fetch data from when when new becomes active
-        override fun onActive() = fetch()
-    }
+    // Doesn't need to be initialized lazily, since it really doesn't do anything interesting by
+    // itself.
+    private val fetchedData = MutableLiveData<List<DayForecast>?>()
 
     // LiveData of the locally-stored (cached) forecasts. We do not update this LiveData directly
     // here, just letting Room to do its job.
@@ -45,6 +42,7 @@ object DailyForecastRepository {
     private val data by lazy {
         object : MediatorLiveData<List<DayForecast>>() {
             private var hasFetchedData = false
+            private var hasBeenActive = false
 
             init {
                 addSource(fetchedData) { data ->
@@ -60,6 +58,17 @@ object DailyForecastRepository {
                 }
                 // Value here should never be null, so start with an empty list.
                 value = emptyList()
+            }
+
+            override fun onActive() {
+                super.onActive()
+
+                if (hasBeenActive.not()) {
+                    // fetch() when becoming "active" for the first time only
+                    fetch()
+
+                    hasBeenActive = true
+                }
             }
         }
     }
