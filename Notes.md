@@ -2,6 +2,7 @@
 - [Guide to app architecture](https://developer.android.com/jetpack/guide)
 
 
+
 # UI Layer
 - [UI layer (guide)](https://developer.android.com/jetpack/guide/ui-layer)
 - [View Model](https://developer.android.com/topic/libraries/architecture/viewmodel)
@@ -25,10 +26,20 @@
 ### Swipe-to-Refresh
 - [Adding Swipe-to-Refresh To Your App (Guide)](https://developer.android.com/training/swipe/add-swipe-interface)
 
+### ConstraintLayout
+- [DA/Traning](https://developer.android.com/training/constraint-layout)
+- [JavaDoc](https://developer.android.com/reference/androidx/constraintlayout/widget/ConstraintLayout)
+	-[Barrier](https://developer.android.com/reference/androidx/constraintlayout/widget/Barrier)
+- [Guidelines, Groups, and Barriers (medium.com)](https://medium.com/tech-takeaways/android-constraint-layout-about-guidelines-groups-and-barriers-c76149e4e4b1)	
+
+## Image Loading
+
+- [Picasso](https://square.github.io/picasso/)
+
 # Data Layer
 
 ## Room
-- [developer.android.com/training](https://developer.android.com/training/data-storage/room)
+- [DA/Training](https://developer.android.com/training/data-storage/room)
 - [google-developer-training.github.io](https://google-developer-training.github.io/android-developer-fundamentals-course-concepts-v2/unit-4-saving-user-data/lesson-9-preferences-and-settings/9-0-c-data-storage/9-0-c-data-storage.html)
 
 ## Retrofit
