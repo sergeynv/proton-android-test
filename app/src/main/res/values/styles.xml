@@ -8,4 +8,12 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="Details.LabelText" parent="TextAppearance.AppCompat.Body2">
+        <item name="android:singleLine">true</item>
+    </style>
+
+    <style name="Details.ValueText" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:singleLine">true</item>
+    </style>
+
 </resources>

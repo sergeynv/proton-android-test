@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="8dp"
+    android:paddingVertical="8dp"
+    android:paddingHorizontal="16dp"
     tools:context=".DetailsActivity">
 
     <!-- Labels -->
@@ -13,8 +14,8 @@
         android:id="@+id/label_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textAppearance="@style/Details.LabelText"
         android:text="@string/label_description"
-        android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -22,8 +23,8 @@
         android:id="@+id/label_precipitation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textAppearance="@style/Details.LabelText"
         android:text="@string/label_precipitation"
-        android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/label_description" />
 
@@ -31,8 +32,8 @@
         android:id="@+id/label_temp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textAppearance="@style/Details.LabelText"
         android:text="@string/label_temp"
-        android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/label_precipitation" />
 
@@ -40,8 +41,8 @@
         android:id="@+id/label_sun"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textAppearance="@style/Details.LabelText"
         android:text="@string/label_sun"
-        android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/label_temp" />
 
@@ -61,7 +62,7 @@
         android:id="@+id/description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
+        android:textAppearance="@style/Details.ValueText"
         app:layout_constraintBaseline_toBaselineOf="@id/label_description"
         app:layout_constraintStart_toEndOf="@id/barrier"
         tools:text="Cloudy with showers"/>
@@ -70,7 +71,7 @@
         android:id="@+id/precipitation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
+        android:textAppearance="@style/Details.ValueText"
         app:layout_constraintBaseline_toBaselineOf="@id/label_precipitation"
         app:layout_constraintStart_toEndOf="@id/barrier"
         tools:text="50%"/>
@@ -79,7 +80,7 @@
         android:id="@+id/temp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
+        android:textAppearance="@style/Details.ValueText"
         app:layout_constraintBaseline_toBaselineOf="@id/label_temp"
         app:layout_constraintStart_toEndOf="@id/barrier"
         tools:text="5 - 15"/>
@@ -88,7 +89,7 @@
         android:id="@+id/sun"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
+        android:textAppearance="@style/Details.ValueText"
         app:layout_constraintBaseline_toBaselineOf="@id/label_sun"
         app:layout_constraintStart_toEndOf="@id/barrier"
         tools:text="7:00 - 18:00"/>
