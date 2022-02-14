@@ -23,5 +23,6 @@
     <string name="label_sun">Sunrise / Sunset</string>
     <string name="label_image_not_downloaded">Image is not downloaded yet.</string>
     <string name="label_image_downloading">Downloading…</string>
+    <string name="label_image_download_failed">Could not download. Try again.</string>
 
 </resources>

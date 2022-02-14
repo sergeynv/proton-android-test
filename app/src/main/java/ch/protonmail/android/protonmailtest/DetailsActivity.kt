@@ -5,10 +5,11 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.view.View.GONE
+import android.view.View.INVISIBLE
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.squareup.picasso.Picasso
 
 /**
  * Shows all the details for a particular day.
@@ -36,7 +37,17 @@ class DetailsActivity : AppCompatActivity() {
             findViewById<TextView>(R.id.temp).text = "$low / $high"
             findViewById<TextView>(R.id.sun).text = "$sunrise / $sunset"
 
-            btnDownload.setOnClickListener { loadImageInto(imageView) }
+            btnDownload.setOnClickListener {
+                imageLabel.setText(R.string.label_image_downloading)
+                loadImageInto(imageView) { success ->
+                    if (success) {
+                        btnDownload.visibility = INVISIBLE
+                        imageLabel.visibility = GONE
+                    } else {
+                        imageLabel.setText(R.string.label_image_download_failed)
+                    }
+                }
+            }
         }
     }
 
