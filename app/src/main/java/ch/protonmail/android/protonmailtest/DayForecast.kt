@@ -1,7 +1,6 @@
 package ch.protonmail.android.protonmailtest
 
 import androidx.room.Entity
-import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import java.time.LocalTime
@@ -17,6 +16,6 @@ data class DayForecast(
     val low: Int,
     val image: String?
 ) {
-    @Ignore
-    val rainChanceInPercent: Int = (rainChance * 100).toInt()
+    val rainChanceInPercent: Int
+        get() = (rainChance * 100).toInt()
 }

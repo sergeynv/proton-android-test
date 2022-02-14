@@ -38,7 +38,7 @@ class DailyForecastAdapter extends RecyclerView.Adapter<DailyForecastAdapter.Vie
         final StringBuilder subtitleBuilder = new StringBuilder()
                 .append("High: ").append(f.getHigh()).append(" | ")
                 .append("Low: ").append(f.getLow()).append(" | ")
-                .append("Rain: ").append(f.getRainChanceInPercent() + '%');
+                .append("Rain: ").append(f.getRainChanceInPercent()).append('%');
         if (DISPLAY_SUNRISE_SUNSET) {
             subtitleBuilder.append(" | ")
                     .append("Sunrise: ").append(f.getSunrise()).append(" | ")
