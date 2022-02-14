@@ -19,7 +19,7 @@
     <!-- Labels -->
     <string name="label_description">Description</string>
     <string name="label_precipitation">Precipitation</string>
-    <string name="label_temp">Low / High</string>
-    <string name="label_sun">Rise / Set</string>
+    <string name="label_temp">Low / High Temp.</string>
+    <string name="label_sun">Sunrise / Sunset</string>
 
 </resources>

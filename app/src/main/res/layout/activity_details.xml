@@ -49,12 +49,12 @@
     <!-- Vertical Barrier -->
 
     <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/barrier"
+        android:id="@+id/barrier_vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:barrierDirection="end"
         app:barrierMargin="16dp"
-        app:constraint_referenced_ids="label_description,label_precipitation, label_temp" />
+        app:constraint_referenced_ids="label_sun, label_precipitation, label_temp" />
 
     <!-- Values -->
 
@@ -64,7 +64,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="@style/Details.ValueText"
         app:layout_constraintBaseline_toBaselineOf="@id/label_description"
-        app:layout_constraintStart_toEndOf="@id/barrier"
+        app:layout_constraintStart_toEndOf="@id/barrier_vertical"
         tools:text="Cloudy with showers"/>
 
     <TextView
@@ -73,7 +73,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="@style/Details.ValueText"
         app:layout_constraintBaseline_toBaselineOf="@id/label_precipitation"
-        app:layout_constraintStart_toEndOf="@id/barrier"
+        app:layout_constraintStart_toEndOf="@id/barrier_vertical"
         tools:text="50%"/>
 
     <TextView
@@ -82,7 +82,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="@style/Details.ValueText"
         app:layout_constraintBaseline_toBaselineOf="@id/label_temp"
-        app:layout_constraintStart_toEndOf="@id/barrier"
+        app:layout_constraintStart_toEndOf="@id/barrier_vertical"
         tools:text="5 - 15"/>
 
     <TextView
@@ -91,13 +91,35 @@
         android:layout_height="wrap_content"
         android:textAppearance="@style/Details.ValueText"
         app:layout_constraintBaseline_toBaselineOf="@id/label_sun"
-        app:layout_constraintStart_toEndOf="@id/barrier"
+        app:layout_constraintStart_toEndOf="@id/barrier_vertical"
         tools:text="7:00 - 18:00"/>
+
+    <!-- Horizontal Barrier -->
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:barrierMargin="16dp"
+        app:constraint_referenced_ids="label_sun, sun" />
+
+    <!-- Image -->
+
+    <ImageView
+        android:id="@+id/image_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/barrier_horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/btn_download" />
 
     <!-- Button -->
 
     <Button
-        android:id="@+id/download"
+        android:id="@+id/btn_download"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/btn_download"
