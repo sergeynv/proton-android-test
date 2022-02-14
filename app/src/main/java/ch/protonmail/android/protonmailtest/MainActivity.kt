@@ -9,11 +9,11 @@ import androidx.fragment.app.Fragment
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 
 class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: DailyForecastViewModel
-    private lateinit var viewPager: ViewPager2
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,17 +26,23 @@ class MainActivity : AppCompatActivity() {
 
         // Init UI.
         setContentView(R.layout.activity_main)
-        viewPager = findViewById<ViewPager2>(R.id.view_pager)
+
+        // Set up the TabLayout and the ViewPager and "connect" the two.
+        val tabLayout = findViewById<TabLayout>(R.id.tab_layout)
+        val viewPager = findViewById<ViewPager2>(R.id.view_pager)
             .apply { adapter = pagerAdapter }
-
-        findViewById<BottomNavigationView>(R.id.bottom_navigation)
-            .setOnItemSelectedListener { onNavigationItemSelected(it.itemId) }
-
-        val srl = findViewById<SwipeRefreshLayout>(R.id.swipe_refresh_layout)
-        srl.setOnRefreshListener { viewModel.fetch() }
+        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+            when (position) {
+                TAB_INDEX_UPCOMING -> tab.setText(R.string.tab_title_upcoming)
+                TAB_INDEX_HOTTEST -> tab.setText(R.string.tab_title_hottest)
+            }
+        }.attach()
 
         val offlineLabel = findViewById<View>(R.id.label_offline)
         val noDataLabel = findViewById<View>(R.id.label_no_data)
+
+        val srl = findViewById<SwipeRefreshLayout>(R.id.swipe_refresh_layout)
+            .apply { setOnRefreshListener { viewModel.fetch() } }
 
         // Now subscribe to the LiveData-s (exposed by the ViewModel) we are interested in on the
         // Activity scope.
@@ -75,27 +81,19 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
-    private fun onNavigationItemSelected(id: Int): Boolean {
-        when (id) {
-            R.id.navigation_item_upcoming -> viewPager.currentItem = POSITION_UPCOMING
-            R.id.navigation_item_hottest -> viewPager.currentItem = POSITION_HOTTEST
-            else -> return false
-        }
-        return true
-    }
-
     private val pagerAdapter = object : FragmentStateAdapter(this) {
-        override fun getItemCount() = 2
+        override fun getItemCount() = TABS_COUNT
 
         override fun createFragment(position: Int): Fragment = when (position) {
-            POSITION_UPCOMING -> UpcomingFragment()
-            POSITION_HOTTEST -> HottestFragment()
+            TAB_INDEX_UPCOMING -> UpcomingFragment()
+            TAB_INDEX_HOTTEST -> HottestFragment()
             else -> throw IllegalArgumentException("Illegal position index $position")
         }
     }
 
     companion object {
-        private const val POSITION_UPCOMING = 0;
-        private const val POSITION_HOTTEST = 1;
+        private const val TABS_COUNT = 2
+        private const val TAB_INDEX_UPCOMING = 0
+        private const val TAB_INDEX_HOTTEST = 1
     }
 }
