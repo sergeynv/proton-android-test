@@ -41,14 +41,21 @@ class DetailsActivity : AppCompatActivity() {
                 imageLabel.setText(R.string.label_image_downloading)
                 loadImageInto(imageView) { success ->
                     if (success) {
-                        btnDownload.visibility = INVISIBLE
-                        imageLabel.visibility = GONE
+                        onImageLoaded()
                     } else {
                         imageLabel.setText(R.string.label_image_download_failed)
                     }
                 }
             }
+
+            // Also try loading form cache
+            loadImageFromCacheInto(imageView) { onImageLoaded() }
         }
+    }
+
+    private fun onImageLoaded() {
+        btnDownload.visibility = INVISIBLE
+        imageLabel.visibility = GONE
     }
 
     companion object {
