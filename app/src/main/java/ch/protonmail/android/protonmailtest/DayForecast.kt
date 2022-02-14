@@ -16,7 +16,7 @@ data class DayForecast(
     @SerializedName("chance_rain") val rainChance: Float,
     val high: Int,
     val low: Int,
-    val image: String
+    @SerializedName("image") val imageUrl: String
 ) : Parcelable {
     val rainChanceInPercent: Int
         get() = (rainChance * 100).toInt()
@@ -29,7 +29,7 @@ data class DayForecast(
         parcel.writeFloat(rainChance)
         parcel.writeInt(high)
         parcel.writeInt(low)
-        parcel.writeString(image)
+        parcel.writeString(imageUrl)
     }
 
     override fun describeContents(): Int = 0

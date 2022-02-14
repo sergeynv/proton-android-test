@@ -4,8 +4,10 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.squareup.picasso.Picasso
 
 /**
  * Shows all the details for a particular day.
@@ -24,10 +26,13 @@ class DetailsActivity : AppCompatActivity() {
             findViewById<TextView>(R.id.precipitation).text = "$rainChanceInPercent%"
             findViewById<TextView>(R.id.temp).text = "$low / $high"
             findViewById<TextView>(R.id.sun).text = "$sunrise / $sunset"
-        }
 
-        //findViewById<Button>(R.id.download).setOnClickListener(downloadListener)
+            val imageView = findViewById<ImageView>(R.id.image_view)
+            loadImage(imageUrl, imageView)
+        }
     }
+
+    private fun loadImage(url: String, view: ImageView) = Picasso.get().load(url).into(view)
 
     companion object {
         private const val EXTRA_DAY_FORECAST =

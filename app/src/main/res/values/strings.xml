@@ -21,5 +21,7 @@
     <string name="label_precipitation">Precipitation</string>
     <string name="label_temp">Low / High Temp.</string>
     <string name="label_sun">Sunrise / Sunset</string>
+    <string name="label_image_not_downloaded">Image is not downloaded yet.</string>
+    <string name="label_image_downloading">Downloading…</string>
 
 </resources>
