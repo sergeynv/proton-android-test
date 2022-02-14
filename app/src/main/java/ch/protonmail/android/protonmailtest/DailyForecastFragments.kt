@@ -15,14 +15,14 @@ import androidx.recyclerview.widget.RecyclerView
  */
 internal sealed class BaseDailyForecastFragment : Fragment() {
     protected lateinit var viewModel: DailyForecastViewModel
-    private val adapter by lazy { DailyForecastAdapter() }
+    private val adapter by lazy { DailyForecastAdapter { onItemClicked(it) } }
 
     final override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         // Let all the DailyForecastFragments hosted by the same Activity share the ViewModel (which
         // makes sense since we have a single REST API call which returns all of the data, and the
-        // filtering out and sorting is done locally)
+        // filtering and sorting is done locally)
         viewModel = ViewModelProvider(requireActivity()).get(DailyForecastViewModel::class.java)
 
         // Now that ViewModel is ready, we can get and subscribe to the LiveData.
@@ -44,6 +44,11 @@ internal sealed class BaseDailyForecastFragment : Fragment() {
     }
 
     protected abstract fun getForecastLiveData(): LiveData<List<DayForecast>>
+
+    // Launch DetailsActivity.
+    private fun onItemClicked(dayForecast: DayForecast) =
+        DetailsActivity.buildIntent(requireContext(), dayForecast)
+            .also { startActivity(it) }
 }
 
 /**

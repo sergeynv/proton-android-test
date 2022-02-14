@@ -12,4 +12,7 @@
     <!-- Labels -->
     <string name="label_offline">Offline</string>
     <string name="label_no_data">No data available.</string>
+
+    <!-- DETAILS ACTIVITY -->
+    <string name="title_day_index">Day %d</string>
 </resources>

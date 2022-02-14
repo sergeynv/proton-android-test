@@ -1,38 +1,30 @@
 package ch.protonmail.android.protonmailtest
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
-import android.view.View
-import android.widget.Button
-import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 
 /**
  * Shows all the details for a particular day.
  */
 class DetailsActivity : AppCompatActivity() {
-
-    // TODO: Please fix any errors and implement the missing parts (including any UI changes)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val dayForecast = intent.getParcelableExtra<DayForecast>(EXTRA_DAY_FORECAST)!!
+        title = getString(R.string.title_day_index, dayForecast.dayIndex)
+
         setContentView(R.layout.activity_details)
-        findViewById<Button>(R.id.download).setOnClickListener(downloadListener)
-        setTitle()
-        displayData("")
+        //findViewById<Button>(R.id.download).setOnClickListener(downloadListener)
     }
 
-    fun setTitle() {
-        title = "Details"
-    }
+    companion object {
+        private const val EXTRA_DAY_FORECAST =
+            "ch.protonmail.android.protonmailtest.EXTRA_DAY_FORECAST"
 
-    fun displayData(text: String) {
-        findViewById<TextView>(R.id.title).text = text
-    }
-
-    val downloadListener = View.OnClickListener {
-        downloadTheImage("")
-    }
-
-    fun downloadTheImage(url: String) {
-        // TODO implement the procedure for image downloading
+        fun buildIntent(context: Context, dayForecast: DayForecast) =
+            Intent(context, DetailsActivity::class.java)
+                .apply { putExtra(EXTRA_DAY_FORECAST, dayForecast) }
     }
 }

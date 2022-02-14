@@ -12,12 +12,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 class DailyForecastAdapter extends RecyclerView.Adapter<DailyForecastAdapter.ViewHolder>
         implements Observer<List<DayForecast>> {
     private static final boolean DISPLAY_SUNRISE_SUNSET = false;
 
-    private final @NonNull List<DayForecast> mForecast = new ArrayList<>();
+    private final @NonNull List<DayForecast> mForecasts = new ArrayList<>();
+    private final Consumer<DayForecast> mOnItemClickedCallback;
+
+    DailyForecastAdapter(Consumer<DayForecast> onItemClickedCallback) {
+        mOnItemClickedCallback = onItemClickedCallback;
+    }
 
     @NonNull
     @Override
@@ -30,40 +36,45 @@ class DailyForecastAdapter extends RecyclerView.Adapter<DailyForecastAdapter.Vie
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        final DayForecast f = mForecast.get(position);
+        final DayForecast df = mForecasts.get(position);
 
-        final String title = "Day: " + f.getDayIndex() + ": " + f.getDescription();
+        final String title = "Day: " + df.getDayIndex() + ": " + df.getDescription();
         holder.title.setText(title);
 
         final StringBuilder subtitleBuilder = new StringBuilder()
-                .append("High: ").append(f.getHigh()).append(" | ")
-                .append("Low: ").append(f.getLow()).append(" | ")
-                .append("Rain: ").append(f.getRainChanceInPercent()).append('%');
+                .append("High: ").append(df.getHigh()).append(" | ")
+                .append("Low: ").append(df.getLow()).append(" | ")
+                .append("Rain: ").append(df.getRainChanceInPercent()).append('%');
         if (DISPLAY_SUNRISE_SUNSET) {
             subtitleBuilder.append(" | ")
-                    .append("Sunrise: ").append(f.getSunrise()).append(" | ")
-                    .append("Sunset: ").append(f.getSunset());
+                    .append("Sunrise: ").append(df.getSunrise()).append(" | ")
+                    .append("Sunset: ").append(df.getSunset());
         }
         holder.subtitle.setText(subtitleBuilder.toString());
     }
 
     @Override
     public int getItemCount() {
-        return mForecast.size();
+        return mForecasts.size();
     }
 
     @Override
     public void onChanged(List<DayForecast> newForecast) {
         // Update the data.
-        mForecast.clear();
+        mForecasts.clear();
         if (newForecast != null) {
-            mForecast.addAll(newForecast);
+            mForecasts.addAll(newForecast);
         }
         // Trigger UI update.
         notifyDataSetChanged();
     }
 
-    protected static class ViewHolder extends RecyclerView.ViewHolder {
+    private void onItemClick(int position) {
+        final DayForecast df = mForecasts.get(position);
+        mOnItemClickedCallback.accept(df);
+    }
+
+    protected class ViewHolder extends RecyclerView.ViewHolder {
         final TextView title;
         final TextView subtitle;
 
@@ -71,6 +82,7 @@ class DailyForecastAdapter extends RecyclerView.Adapter<DailyForecastAdapter.Vie
             super(view);
             title = view.findViewById(android.R.id.text1);
             subtitle = view.findViewById(android.R.id.text2);
+            view.setOnClickListener(v -> onItemClick(getBindingAdapterPosition()));
         }
     }
 }
