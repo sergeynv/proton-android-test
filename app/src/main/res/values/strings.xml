@@ -7,6 +7,7 @@
     <string name="tab_title_hottest">Hottest</string>
     <!-- Options Menu-->
     <string name="menu_refresh">Refresh</string>
+    <string name="menu_clear_cache">Clear cache</string>
     <!-- Labels -->
     <string name="label_offline">Offline</string>
     <string name="label_no_data">No data available.</string>

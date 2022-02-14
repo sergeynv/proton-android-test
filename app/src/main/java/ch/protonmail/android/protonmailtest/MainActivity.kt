@@ -67,6 +67,7 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_refresh -> viewModel.fetch()
+            R.id.menu_clear_cache -> viewModel.clearCache()
             else -> return super.onOptionsItemSelected(item)
         }
         return true

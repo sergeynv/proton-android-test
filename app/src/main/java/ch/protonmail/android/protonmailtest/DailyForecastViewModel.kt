@@ -33,6 +33,8 @@ class DailyForecastViewModel : ViewModel() {
     }
 
     fun fetch() = DailyForecastRepository.fetch()
+
+    fun clearCache() = DailyForecastRepository.clearCache()
 }
 
 fun ComponentActivity.getDailyForecastViewModel() =

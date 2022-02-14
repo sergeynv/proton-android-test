@@ -7,4 +7,9 @@
         android:title="@string/menu_refresh"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/menu_clear_cache"
+        android:title="@string/menu_clear_cache"
+        app:showAsAction="never" />
+
 </menu>
