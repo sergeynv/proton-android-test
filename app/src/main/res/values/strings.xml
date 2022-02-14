@@ -2,6 +2,7 @@
     <string name="app_name">ProtonMailTest</string>
 
     <!-- MAIN ACTIVITY -->
+    <string name="title_forecast">Forecast</string>
     <!-- Tabs -->
     <string name="tab_title_upcoming">Upcoming</string>
     <string name="tab_title_hottest">Hottest</string>

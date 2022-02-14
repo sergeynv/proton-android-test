@@ -17,6 +17,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Update the title (in the action bar).
+        setTitle(R.string.title_forecast)
 
         // Get (or Create) a ViewModel (that's the same ViewModel instance the fragments will use as
         // well).
