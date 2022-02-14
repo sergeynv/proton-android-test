@@ -36,11 +36,9 @@ class DetailsActivity : AppCompatActivity() {
             findViewById<TextView>(R.id.temp).text = "$low / $high"
             findViewById<TextView>(R.id.sun).text = "$sunrise / $sunset"
 
-            btnDownload.setOnClickListener { loadImage(imageUrl) }
+            btnDownload.setOnClickListener { loadImageInto(imageView) }
         }
     }
-
-    private fun loadImage(url: String) = Picasso.get().load(url).into(imageView)
 
     companion object {
         private const val EXTRA_DAY_FORECAST =
