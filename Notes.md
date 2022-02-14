@@ -29,6 +29,7 @@
 
 ## Room
 - [developer.android.com/training](https://developer.android.com/training/data-storage/room)
+- [google-developer-training.github.io](https://google-developer-training.github.io/android-developer-fundamentals-course-concepts-v2/unit-4-saving-user-data/lesson-9-preferences-and-settings/9-0-c-data-storage/9-0-c-data-storage.html)
 
 ## Retrofit
 - [github](https://square.github.io/retrofit/)

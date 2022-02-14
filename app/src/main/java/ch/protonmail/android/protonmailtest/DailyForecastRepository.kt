@@ -1,42 +1,73 @@
 package ch.protonmail.android.protonmailtest
 
 import android.util.Log
-import android.widget.Toast
 import androidx.annotation.MainThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
+import ch.protonmail.android.protonmailtest.DailyForecastRepository.clearCache
+import ch.protonmail.android.protonmailtest.DailyForecastRepository.fetch
+import ch.protonmail.android.protonmailtest.DailyForecastRepository.getData
+import ch.protonmail.android.protonmailtest.DailyForecastRepository.isFetching
+import ch.protonmail.android.protonmailtest.DailyForecastRepository.isLastFetchFailed
+import ch.protonmail.android.protonmailtest.ForecastApplication.Companion.maybeShowDebugToast
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+/**
+ * @see [getData]
+ * @see [isFetching]
+ * @see [isLastFetchFailed]
+ * @see [fetch]
+ * @see [clearCache]
+ */
 object DailyForecastRepository {
     private const val TAG = "DailyForecastLiveData"
-    // Would love to disable this, but the mockapi.io we are using here, is just sooo unreliable...
-    private const val DEBUG_SHOW_TOAST = true
 
+    // Doesn't need to be initialized lazily, since it really we'll do something interesting (force
+    // fetching) when it becomes active.
     private val fetchedData = object : MutableLiveData<List<DayForecast>?>(null) {
         // (Re-)fetch data from when when new becomes active
         override fun onActive() = fetch()
     }
 
-    private val cachedData = MutableLiveData<List<DayForecast>>(emptyList())
+    // LiveData of the locally-stored (cached) forecasts. We do not update this LiveData directly
+    // here, just letting Room to do its job.
+    private val cachedData: LiveData<List<DayForecast>> by lazy {
+        // Make sure the List<LiveData> is never null here.
+        Transformations.map(ForecastLocalStorage.getAll()) { it ?: emptyList() }
+    }
 
     // LiveData that "combines" fetched data and the cached data, by always "prioritizing" the
     // fetched data when it's available (non-null).
     private val data by lazy {
         object : MediatorLiveData<List<DayForecast>>() {
+            private var hasFetchedData = false
+
             init {
-                // Use updated fetched data, unless it's null, then use cached data.
-                addSource(fetchedData) { data -> postValue(data ?: cachedData.value) }
-                // Ignore updates to the cached data, unless fetched data is null.
-                addSource(cachedData) { data -> if (fetchedData.value == null) postValue(data)}
+                addSource(fetchedData) { data ->
+                    // Update value, unless the new data is null.
+                    if (data != null) {
+                        hasFetchedData = true
+                        postValue(data)
+                    }
+                }
+                addSource(cachedData) { data ->
+                    // Ignore updates to the cached data, unless there is no fetched data.
+                    if (hasFetchedData.not()) postValue(data)
+                }
+                // Value here should never be null, so start with an empty list.
+                value = emptyList()
             }
         }
     }
 
+    // Indicator of whether there is an "in-progress" network request to fetch the forecast.
     private val fetching = MutableLiveData(false)
 
+    // Indicator of whether the last network request to fetch the forecast has failed.
     private val lastFetchFailed = MutableLiveData(false)
 
     fun getData(): LiveData<List<DayForecast>> = data
@@ -51,6 +82,7 @@ object DailyForecastRepository {
     @MainThread
     fun fetch() {
         Log.d(TAG, "fetch()")
+        maybeShowDebugToast("fetch() started")
 
         if (fetching.value!!) {
             Log.d(TAG, "  > already in progress")
@@ -59,13 +91,19 @@ object DailyForecastRepository {
         fetching.postValue(true)
 
         ForecastRestService.forecast().enqueue(fetchingCallback)
-
-        maybeShowDebugToast("fetch() started")
     }
 
-    private fun maybeShowDebugToast(text: String) {
-        if (!DEBUG_SHOW_TOAST) return
-        Toast.makeText(ForecastApplication.instance, text, Toast.LENGTH_SHORT).show()
+    /** Clears local cache. */
+    fun clearCache() = ForecastLocalStorage.clear()
+
+    /** Store data to the local cache. */
+    private fun cache(data: List<DayForecast>) {
+        // Actually this needs to be an atomic operation, otherwise we may lose cache, if the
+        // process is killed or tha app crashes after clear() call is completed, but before store()
+        // had a chance to fully run, or if store simply fails.
+        // But for the test assignment this will have to do.
+        ForecastLocalStorage.clear()
+        ForecastLocalStorage.store(data)
     }
 
     private val fetchingCallback = object : Callback<List<DayForecast>> {
@@ -74,22 +112,29 @@ object DailyForecastRepository {
             response: Response<List<DayForecast>>
         ) {
             Log.d(TAG, "onResponse() $response");
-
-            data.postValue(if (response.isSuccessful) response.body() else emptyList())
-            fetching.postValue(false)
-            lastFetchFailed.postValue(false)
-
             maybeShowDebugToast("fetch() completed, code=${response.code()}")
+
+            if (response.isSuccessful) {
+                // Only post to the fetchedData LiveData, otherwise we'll keep the value that's
+                // already in there and indicate that the last fetch has failed (by posting to the
+                // lastFetchFailed LiveData).
+                val data = response.body()!!
+                fetchedData.postValue(response.body())
+                cache(data)
+            }
+            fetching.postValue(false)
+            lastFetchFailed.postValue(response.isSuccessful.not())
         }
 
         override fun onFailure(call: Call<List<DayForecast>>, t: Throwable) {
             Log.d(TAG, "onFailure()", t)
+            maybeShowDebugToast("fetch() failed, ${t.message}")
 
-            data.postValue(emptyList())
+            // Do not post to the fetchedData LiveData: keeping the value that's already in there is
+            // fine, we just need to indicate that the last fetch has failed (by posting to the
+            // lastFetchFailed LiveData).
             fetching.postValue(false)
             lastFetchFailed.postValue(true)
-
-            maybeShowDebugToast("fetch() failed, ${t.message}")
         }
     }
 }
