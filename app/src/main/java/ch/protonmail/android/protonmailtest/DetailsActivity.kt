@@ -11,7 +11,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
 /**
- * Shows all the details for a particular day.
+ * Displays detailed [forecast][DayForecast] for a single day.
  */
 class DetailsActivity : AppCompatActivity() {
     private lateinit var imageView: ImageView

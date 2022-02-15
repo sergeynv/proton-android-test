@@ -8,15 +8,14 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import java.time.LocalTime
 
+/** [Retrofit] interface for communicating with the remote forecast service. */
 interface ForecastRestService {
 
     @GET("api/forecast")
     fun forecast(): Call<List<DayForecast>>
 
-    // Making the companion object implement the interface, makes it's possible for the clients to
-    // simply use the forecast() as if it was a "Java static" method.
-    companion object : ForecastRestService {
-        override fun forecast(): Call<List<DayForecast>> = instance.forecast()
+    companion object {
+        fun forecast(): Call<List<DayForecast>> = instance.forecast()
 
         private const val ENDPOINT = "https://5c5c8ba58d018a0014aa1b24.mockapi.io/"
 

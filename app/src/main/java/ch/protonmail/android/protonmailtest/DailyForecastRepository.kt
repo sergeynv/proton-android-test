@@ -17,6 +17,10 @@ import retrofit2.Callback
 import retrofit2.Response
 
 /**
+ * The class responsible for loading, caching and managing forecast data, which provides APIs to
+ * retrieve the data itself as well as information about its state (eg. [isLastFetchFailed]) to the
+ * UI-layer ([DailyForecastViewModel]).
+ *
  * @see [getData]
  * @see [isFetching]
  * @see [isLastFetchFailed]
@@ -26,25 +30,51 @@ import retrofit2.Response
 object DailyForecastRepository {
     private const val TAG = "DailyForecastLiveData"
 
-    // Doesn't need to be initialized lazily, since it really doesn't do anything interesting by
-    // itself.
+    /**
+     * Contains the last successfully fetched (over the network) data.
+     *
+     * This [LiveData] is not accessible outside of the [DailyForecastRepository] directly, but is
+     * a "part of" [data LiveData][data] which could available to clients of the
+     * [DailyForecastRepository] via [getData].
+     * @see getData
+     *
+     * Note: it doesn't need to be initialized lazily, since it really doesn't do anything
+     * interesting by itself.
+     */
     private val fetchedData = MutableLiveData<List<DayForecast>?>()
 
-    // LiveData of the locally-stored (cached) forecasts. We do not update this LiveData directly
-    // here, just letting Room to do its job.
+
+    /**
+     * Contains the locally stored (cached) forecasts. [DailyForecastRepository] does not make
+     * changes to this [LiveData] directly, all the changes "flow" through
+     * [Room][androidx.room.Room].
+     * @see ForecastLocalStorage
+     *
+     * This [LiveData] is not accessible outside of the [DailyForecastRepository] directly, but is
+     * a "part of" [data LiveData][data] which could available to clients of the
+     * [DailyForecastRepository] via [getData].
+     * @see getData
+     */
     private val cachedData: LiveData<List<DayForecast>> by lazy {
         // Make sure the List<LiveData> is never null here.
         Transformations.map(ForecastLocalStorage.getAll()) { it ?: emptyList() }
     }
 
-    // LiveData that "combines" fetched data and the cached data, by always "prioritizing" the
-    // fetched data when it's available (non-null).
+
+    /**
+     * Combines [fetched][fetchedData] and [cached][cachedData] data into a single [LiveData],
+     * exposed to the clients of [DailyForecastRepository] via [getData]
+     * @see getData
+     *
+     * Note: we always prioritize the [fetched data][fetchedData] when is is available (non-null).
+     */
     private val data by lazy {
         object : MediatorLiveData<List<DayForecast>>() {
             private var hasFetchedData = false
             private var hasBeenActive = false
 
             init {
+                // Add fetched data
                 addSource(fetchedData) { data ->
                     // Update value, unless the new data is null.
                     if (data != null) {
@@ -52,19 +82,22 @@ object DailyForecastRepository {
                         postValue(data)
                     }
                 }
+
+                // Add cached data.
                 addSource(cachedData) { data ->
                     // Ignore updates to the cached data, unless there is no fetched data.
                     if (hasFetchedData.not()) postValue(data)
                 }
-                // Value here should never be null, so start with an empty list.
+
+                // Value here SHOULD NEVER be null, so start with an empty list.
                 value = emptyList()
             }
 
             override fun onActive() {
                 super.onActive()
 
-                if (hasBeenActive.not()) {
-                    // fetch() when becoming "active" for the first time only
+                if (!hasBeenActive) {
+                    // fetch() when becoming "active" for the first time only.
                     fetch()
 
                     hasBeenActive = true
@@ -73,21 +106,45 @@ object DailyForecastRepository {
         }
     }
 
-    // Indicator of whether there is an "in-progress" network request to fetch the forecast.
+    /**
+     * Indicates whether there is an "in-progress" network request to fetch the forecast.
+     * Available outside via [isFetching].
+     * @see isFetching
+     */
     private val fetching = MutableLiveData(false)
 
-    // Indicator of whether the last network request to fetch the forecast has failed.
+    /**
+     * Indicates whether the last network request to fetch the forecast has failed.
+     * Available outside via [isLastFetchFailed].
+     * @see isLastFetchFailed
+     */
     private val lastFetchFailed = MutableLiveData(false)
 
+    /**
+     * Get the available forecast data.
+     * @return [LiveData] that contains forecast data.
+     */
     fun getData(): LiveData<List<DayForecast>> = data
 
+    /**
+     * @return [LiveData] that indicates whether there is an "in-progress" network request to fetch
+     * the forecast.
+     */
     fun isFetching(): LiveData<Boolean> = fetching
 
+    /**
+     * @return [LiveData] that indicates whether the last network request to fetch the forecast has
+     * failed.
+     */
     fun isLastFetchFailed(): LiveData<Boolean> = lastFetchFailed
 
-    // Restricting this so that it should only be called from the Main Thread (which is kindof
-    // cheating slightly, normally this the proper should be implemented here, but that feels out of
-    // scope for a test assignment).
+    /**
+     * Make another attempt to fetch data.
+     *
+     * WARNING: this method should only be invoked on the MainThread.
+     * (in the real application this should rather be made thread-safe, but for the test assignments
+     * "restricting" this to the MainThread seems reasonable)
+     */
     @MainThread
     fun fetch() {
         Log.d(TAG, "fetch()")
@@ -102,7 +159,7 @@ object DailyForecastRepository {
         ForecastRestService.forecast().enqueue(fetchingCallback)
     }
 
-    /** Clears local cache. */
+    /** Clear local cache. */
     fun clearCache() = ForecastLocalStorage.clear()
 
     private val fetchingCallback = object : Callback<List<DayForecast>> {

@@ -11,7 +11,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 /**
- * Base class for Fragments that display daily forecast.
+ * Base class for [Fragments][Fragment] that display list of [daily forecasts][DayForecast] -
+ * [UpcomingFragment] and [HottestFragment].
  */
 internal sealed class BaseDailyForecastFragment : Fragment() {
     protected lateinit var viewModel: DailyForecastViewModel
@@ -63,7 +64,7 @@ internal sealed class BaseDailyForecastFragment : Fragment() {
 }
 
 /**
- * Displays list of all available daily forecast.
+ * Displays list of all available [daily forecasts][DayForecast].
  */
 internal class UpcomingFragment : BaseDailyForecastFragment() {
     override fun getForecastLiveData() = viewModel.upcoming
@@ -71,8 +72,9 @@ internal class UpcomingFragment : BaseDailyForecastFragment() {
 
 
 /**
- * Displays list of available daily forecast for the days with less than 50% chance of
- * precipitation in in descending order of average daily temperature.
+ * Displays list of available [daily forecasts][DayForecast] for days with less than 50% chance of
+ * precipitation. The days are displayed in descending order of
+ * [the highest daily temperature][DayForecast.high].
  */
 internal class HottestFragment : BaseDailyForecastFragment() {
     override fun getForecastLiveData() = viewModel.hottest

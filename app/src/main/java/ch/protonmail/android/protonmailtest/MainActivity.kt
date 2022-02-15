@@ -1,6 +1,5 @@
 package ch.protonmail.android.protonmailtest
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -13,6 +12,12 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
+/**
+ * Implements the applications Main Screen.
+ * Consists of 2 tabs: ["Upcoming"][UpcomingFragment] and ["Hottest"][HottestFragment].
+ * @see UpcomingFragment
+ * @see HottestFragment
+ */
 class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: DailyForecastViewModel
 

@@ -18,6 +18,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+/**
+ * {@link RecyclerView.Adapter} used by both
+ * {@link BaseDailyForecastFragment DailyForecastFragments} - {@link UpcomingFragment} and
+ * {@link HottestFragment} - to display a list of {@link DayForecast forecasts}.
+ * <p>
+ * Note: the implementation of the class was intentionally left in Java, assuming Java is one of
+ * languages skills in which are to be assessed.
+ */
 class DailyForecastAdapter extends RecyclerView.Adapter<DailyForecastAdapter.ViewHolder>
         implements Observer<List<DayForecast>> {
     private static final boolean DISPLAY_SUNRISE_SUNSET = false;
@@ -76,7 +84,11 @@ class DailyForecastAdapter extends RecyclerView.Adapter<DailyForecastAdapter.Vie
         if (newForecast != null) {
             mForecasts.addAll(newForecast);
         }
-        // Trigger UI update.
+
+        // Trigger UI update
+        // Note: this is triggering a "full" re-render, which generally we would need to avoid, but
+        // here we do not have more fain-grained data, so this will have to do for this test
+        // assignment).
         notifyDataSetChanged();
     }
 
@@ -85,7 +97,7 @@ class DailyForecastAdapter extends RecyclerView.Adapter<DailyForecastAdapter.Vie
         mOnItemClickedCallback.accept(df);
     }
 
-    protected class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder {
         final TextView title;
         final TextView subtitle;
         final ImageView icon;
@@ -95,6 +107,8 @@ class DailyForecastAdapter extends RecyclerView.Adapter<DailyForecastAdapter.Vie
             title = view.findViewById(android.R.id.text1);
             subtitle = view.findViewById(android.R.id.text2);
             icon = view.findViewById(R.id.icon);
+
+            // Note: that having to call onItemClick() is the reason this class is not static.
             view.setOnClickListener(v -> onItemClick(getBindingAdapterPosition()));
         }
     }
