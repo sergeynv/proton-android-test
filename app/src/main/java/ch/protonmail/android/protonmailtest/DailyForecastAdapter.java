@@ -1,9 +1,13 @@
 package ch.protonmail.android.protonmailtest;
 
+import static ch.protonmail.android.protonmailtest.PicassoUtilsKt.cancelLoadImage;
+import static ch.protonmail.android.protonmailtest.PicassoUtilsKt.loadImageFromCacheInto;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -30,7 +34,7 @@ class DailyForecastAdapter extends RecyclerView.Adapter<DailyForecastAdapter.Vie
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         final Context context = parent.getContext();
         final View view = LayoutInflater.from(context)
-                .inflate(android.R.layout.simple_list_item_2, parent, false);
+                .inflate(R.layout.list_item_day_forecast, parent, false);
         return new ViewHolder(view);
     }
 
@@ -51,6 +55,13 @@ class DailyForecastAdapter extends RecyclerView.Adapter<DailyForecastAdapter.Vie
                     .append("Sunset: ").append(df.getSunset());
         }
         holder.subtitle.setText(subtitleBuilder.toString());
+
+        // Cancel existing load request (if there is one)
+        cancelLoadImage(holder.icon);
+        // Clear out the existing thumbnail (if there is one).
+        holder.icon.setImageDrawable(null);
+        // Start new load request.
+        loadImageFromCacheInto(df, holder.icon);
     }
 
     @Override
@@ -77,11 +88,13 @@ class DailyForecastAdapter extends RecyclerView.Adapter<DailyForecastAdapter.Vie
     protected class ViewHolder extends RecyclerView.ViewHolder {
         final TextView title;
         final TextView subtitle;
+        final ImageView icon;
 
         ViewHolder(@NonNull View view) {
             super(view);
             title = view.findViewById(android.R.id.text1);
             subtitle = view.findViewById(android.R.id.text2);
+            icon = view.findViewById(R.id.icon);
             view.setOnClickListener(v -> onItemClick(getBindingAdapterPosition()));
         }
     }

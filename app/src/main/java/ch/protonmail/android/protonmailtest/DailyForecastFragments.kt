@@ -29,6 +29,17 @@ internal sealed class BaseDailyForecastFragment : Fragment() {
         getForecastLiveData().observe(/* LifecycleOwner*/ this, /* Observer */ adapter)
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        // Ping adapter to re-render all items, which we need in case any of the icons has been
+        // downloaded since last the fragments was "resumed".
+        // This is by far not the best way to do it, but this will have to do for a test assignment
+        // (ideally adapter should be monitoring the state of the cache and reacting to the changes
+        // itself).
+        adapter.notifyDataSetChanged()
+    }
+
     final override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

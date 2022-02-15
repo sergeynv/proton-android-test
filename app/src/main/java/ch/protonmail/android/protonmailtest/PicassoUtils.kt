@@ -13,6 +13,9 @@ fun DayForecast.loadImageInto(
 ) = requestCreator.apply { if (fromCacheOnly) networkPolicy(OFFLINE) }
     .into(imageView, callbackAction)
 
+fun DayForecast.loadImageFromCacheInto(imageView: ImageView) =
+    loadImageInto(fromCacheOnly = true, imageView = imageView)
+
 fun cancelLoadImage(imageView: ImageView) = Picasso.get().cancelRequest(imageView)
 
 // All the DayForecast objects returned by REST service (mockapi.io) seem to have image (precisely:
