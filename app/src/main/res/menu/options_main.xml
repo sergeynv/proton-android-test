@@ -12,4 +12,14 @@
         android:title="@string/menu_clear_cache"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/menu_turn_off_debug_toasts"
+        android:title="@string/menu_turn_off_debug_toasts"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_turn_on_debug_toasts"
+        android:title="@string/menu_turn_on_debug_toasts"
+        app:showAsAction="never" />
+
 </menu>

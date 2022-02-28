@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
+import ch.protonmail.android.protonmailtest.ForecastApplication.Companion.DEBUG_SHOW_TOAST
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -82,6 +83,8 @@ class MainActivity : AppCompatActivity() {
         when (item.itemId) {
             R.id.menu_refresh -> viewModel.fetch()
             R.id.menu_clear_cache -> viewModel.clearCache()
+            R.id.menu_turn_off_debug_toasts -> DEBUG_SHOW_TOAST = false
+            R.id.menu_turn_on_debug_toasts -> DEBUG_SHOW_TOAST = true
             else -> return super.onOptionsItemSelected(item)
         }
         return true

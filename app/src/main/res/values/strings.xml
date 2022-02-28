@@ -9,6 +9,8 @@
     <!-- Options Menu-->
     <string name="menu_refresh">Refresh</string>
     <string name="menu_clear_cache">Clear cache</string>
+    <string name="menu_turn_off_debug_toasts">Turn OFF debug toasts</string>
+    <string name="menu_turn_on_debug_toasts">Turn ON debug toasts</string>
     <!-- Labels -->
     <string name="label_offline">Offline</string>
     <string name="label_no_data">No data available.</string>
